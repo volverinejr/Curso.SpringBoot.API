@@ -15,44 +15,44 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class PageRequestModel {
 	private int page = 0;
 	private int size = 10;
 	private String sort = "id";
-	
+
 	public PageRequestModel(Map<String, String> params) {
-		if (params.containsKey("page")) page = Integer.parseInt( params.get("page") );
-		
-		if (params.containsKey("size")) size = Integer.parseInt( params.get("size") );
-		
-		if (params.containsKey("sort")) sort = params.get("sort");
+		if (params.containsKey("page"))
+			page = Integer.parseInt(params.get("page"));
+
+		if (params.containsKey("size"))
+			size = Integer.parseInt(params.get("size"));
+
+		if (params.containsKey("sort"))
+			sort = params.get("sort");
 	}
-	
-	
+
 	public PageRequest toSpringPageRequest() {
 		List<Order> orders = new ArrayList<>();
-		
+
 		String[] campos = sort.split(",");
-		
+
 		for (String campo : campos) {
 			if (campo.trim().length() > 0) {
-				String column = campo.trim(); 
-				
+				String column = campo.trim();
+
 				if (column.startsWith("-")) {
 					column = column.replace("-", "");
-					
+
 					orders.add(Order.desc(column));
-				}
-				else {
+				} else {
 					orders.add(Order.asc(column));
 				}
 			}
 		}
-		
+
 		return PageRequest.of(page, size, Sort.by(orders));
 	}
-	
-	
 
 }
