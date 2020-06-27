@@ -31,7 +31,7 @@ public class RequestRepositoryTests {
 		User owner = new User();
 		owner.setId(1L);
 		
-		Request request = new Request(null, "Novo notebook", "Coprar um novo note book cala", OffsetDateTime.now(), RequestState.OPEN, owner, null);
+		Request request = new Request(null, "Novo notebook", "Coprar um novo note book cala", OffsetDateTime.now(), RequestState.OPEN, owner, null, null);
 		
 		Request createdRequest = _requestRepository.save(request);
 		
@@ -45,7 +45,7 @@ public class RequestRepositoryTests {
 		User owner = new User();
 		owner.setId(1L);
 		
-		Request request = new Request(1L, "Novo notebook DELL", "Comprar um DEL SSD", null, RequestState.OPEN, owner, null);
+		Request request = new Request(1L, "Novo notebook DELL", "Comprar um DEL SSD", null, RequestState.OPEN, owner, null, null);
 		
 		Request createdRequest = _requestRepository.save(request);
 		
