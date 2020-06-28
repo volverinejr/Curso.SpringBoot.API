@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ import com.springcourse.dto.RequestSaveDto;
 import com.springcourse.dto.RequestUpdateDto;
 import com.springcourse.model.PageModel;
 import com.springcourse.model.PageRequestModel;
+import com.springcourse.security.AccessManager;
 import com.springcourse.service.RequestFileService;
 import com.springcourse.service.RequestService;
 import com.springcourse.service.RequestStageService;
@@ -41,6 +43,13 @@ public class RequestController {
 
 	@Autowired
 	private RequestFileService _fileService;
+	
+	@Autowired
+	private AccessManager _accessManager; 
+
+	
+	
+	
 
 	@PostMapping
 	public ResponseEntity<Request> save(@RequestBody @Valid RequestSaveDto requestSaveDto) {
@@ -51,6 +60,8 @@ public class RequestController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdRequest);
 	}
 
+	
+	@PreAuthorize("@accessManager.isRequestOwner(#id)")
 	@PutMapping("/{id}")
 	public ResponseEntity<Request> update(@PathVariable Long id,
 			@RequestBody @Valid RequestUpdateDto requestUpdateDto) {
@@ -74,7 +85,7 @@ public class RequestController {
 		PageRequestModel prm = new PageRequestModel(params);
 
 		PageModel<Request> pm = _requestService.listAllOnLazyMode(prm);
-
+		
 		return ResponseEntity.ok(pm);
 	}
 
